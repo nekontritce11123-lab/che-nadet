@@ -56,3 +56,9 @@ fun WeatherConditions.forecastWindow(hours: Int): List<WeatherPoint> {
     return hourly.filter { it.at > evaluationAt && it.at <= end && it.temperatureC.isFinite() && it.temperatureC in -100.0..65.0 }
         .sortedBy { it.at }.distinctBy { it.at }.map { it.normalized() }
 }
+
+/** A current-point probability is a forecast with an expiry, never an indefinitely live reading. */
+fun WeatherPoint.upcomingProbability(evaluationAt: java.time.Instant): Int? {
+    val end = probabilityUntil ?: at.plusSeconds(3600)
+    return probabilityPct.percent()?.takeIf { evaluationAt < end && evaluationAt >= at.minusSeconds(300) }
+}

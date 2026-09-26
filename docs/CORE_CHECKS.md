@@ -1,7 +1,7 @@
 # Executed core checks
 
-Groups passed: 49
-Assertions executed: 4194
+Groups passed: 51
+Assertions executed: 4196
 
 - PASS provider apparent temperature is not counted twice
 - PASS 10 C calm wind and rain have different protective layers
@@ -51,6 +51,8 @@ Assertions executed: 4194
 - PASS freezing air cannot recommend warm-weather clothes from contradictory apparent data
 - PASS extreme hot air cannot recommend winter clothes from contradictory apparent data
 - PASS saturated humid heat still warns when provider apparent temperature is missing
+- PASS expired current-hour rain probability is not reused as future rain
+- PASS decoder preserves the exact end of probability interval
 - PASS forecast window sorts deduplicates and discards past data
 
 Exit: 0

@@ -132,6 +132,15 @@ fun additionalChecks() = with(CoreChecks) {
         val r = result(point(33.0).copy(apparentC = null, humidityPct = 100))
         expect(r.warnings.any { it.hazard == Hazard.EXTREME_HEAT }, "bounded fallback must not hide humidity risk")
     }
+    test("expired current-hour rain probability is not reused as future rain") {
+        val p = point().copy(probabilityPct = 90, probabilityUntil = time.plusSeconds(2700))
+        val old = WeatherConditions(p, fetchedAt = time, evaluationAt = time.plusSeconds(3600))
+        expect(Reason.RAIN_LATER !in RecommendationEngine().recommend(old).reasons, "expired probability")
+    }
+    test("decoder preserves the exact end of probability interval") {
+        val p = OpenMeteo.decode(fixture(), time).current
+        expect(p.probabilityUntil == time.plusSeconds(2700), "exact interval end")
+    }
     test("forecast window sorts deduplicates and discards past data") {
         val after = point().copy(at = time.plusSeconds(3600)); val before = point().copy(at = time.minusSeconds(3600))
         val w = WeatherConditions(point(), listOf(after, before, after), time)

@@ -18,6 +18,7 @@ data class WeatherPoint(
     val uv: Double? = null,
     val isDay: Boolean? = null,
     val cloudPct: Int? = null,
+    val probabilityUntil: Instant? = null,
 )
 
 data class WeatherConditions(

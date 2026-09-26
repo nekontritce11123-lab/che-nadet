@@ -75,7 +75,7 @@ class RecommendationEngine {
         val umbrellaOkay = !storm && !strongWind && p.windMs != null && p.gustMs != null &&
             future.all { it.windMs != null && it.gustMs != null }
         if (strongWind) reasons += Reason.STRONG_WIND
-        val rainLater = future.any { it.isRain() || (it.probabilityPct ?: 0) >= 40 } || (!wet && (p.probabilityPct ?: 0) >= 40)
+        val rainLater = future.any { it.isRain() || (it.probabilityPct ?: 0) >= 40 } || (!wet && (p.upcomingProbability(weather.evaluationAt) ?: 0) >= 40)
         if (wet && umbrellaOkay) add(Accessory.UMBRELLA, Reason.WET)
         if (wet && effective < 7) add(Accessory.PACKABLE_RAINCOAT, Reason.WET)
         if (rainLater) add(if (umbrellaOkay) Accessory.UMBRELLA else Accessory.PACKABLE_RAINCOAT, Reason.RAIN_LATER)

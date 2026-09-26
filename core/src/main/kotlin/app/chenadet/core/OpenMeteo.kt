@@ -46,7 +46,7 @@ object OpenMeteo {
         // Probability applies to the precipitation interval ending at this next hourly boundary.
         val nextInterval = points.firstOrNull { it.at > currentTime && it.at.epochSecond - currentTime.epochSecond <= 3600 }
         val timezone = (root["timezone"] as? String)?.takeIf { runCatching { ZoneId.of(it) }.isSuccess } ?: "UTC"
-        return WeatherConditions(currentPoint.copy(uv = uvSample?.uv, probabilityPct = nextInterval?.probabilityPct), points, fetchedAt, timezone)
+        return WeatherConditions(currentPoint.copy(uv = uvSample?.uv, probabilityPct = nextInterval?.probabilityPct, probabilityUntil = nextInterval?.at), points, fetchedAt, timezone)
     }
     private fun point(row: Map<String, Any?>, units: Map<String, Any?>, at: Instant, amountMultiplier: Double?): WeatherPoint? {
         fun n(name: String, unit: String? = null): Double? {

@@ -11,3 +11,5 @@ Stage 3: 17 new test groups failed before implementation. Implemented provider-n
 Regression pass: stale cached forecast was anchored to download time. Four new checks reproduced failures: stale future rain, contradictory apparent values reversing extreme-cold/heat outfits, saturated humidity outside the fallback formula domain. Added a distinct evaluation timestamp, defensive clothing bounds and a humid-heat safety rule. RED 4 groups → GREEN 49 groups / 4194 assertions. Native one-time-permission history reset has an Android unit test written; not executed without SDK/Gradle.
 
 Ruling: keep Android integration on development/android-v1; main remains the verified Kotlin core baseline until a native build can be run. This is not a claim of a completed Android release.
+
+Regression pass: expired current-hour precipitation probability could still be treated as upcoming rain. Added explicit probabilityUntil and evaluation-time filtering in recommendations and metric explanations. Two regression groups RED → GREEN. Latest core result: 51 groups / 4196 assertions, exit 0.
