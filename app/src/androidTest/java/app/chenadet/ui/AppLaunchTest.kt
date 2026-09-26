@@ -43,8 +43,9 @@ class AppLaunchTest {
             awaitText("Можно продолжить без разрешения — просто выберите город.")
             compose.onNodeWithText("Выбрать город вручную").performClick()
             compose.onNodeWithText("Название города").performTextInput("Екатеринбург")
-            awaitText("Екатеринбург", timeout = 30_000)
-            compose.onNodeWithText("Екатеринбург").performClick()
+            val cityResult = hasText("Екатеринбург") and hasClickAction() and !hasSetTextAction()
+            compose.waitUntil(30_000) { compose.onAllNodes(cityResult).fetchSemanticsNodes().isNotEmpty() }
+            compose.onNode(cityResult).performClick()
             compose.waitUntil(30_000) {
                 compose.onAllNodesWithText("Обновляем погоду…").fetchSemanticsNodes().isEmpty() &&
                     runBlocking { store.readCache() } != null
@@ -72,7 +73,9 @@ class AppLaunchTest {
         compose.waitUntil(timeout) { compose.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty() }
     }
     private fun screenshot(name: String) {
-        val directory = File(instrumentation.targetContext.getExternalFilesDir(null), "screenshots").apply { mkdirs() }
+        val directory = InstrumentationRegistry.getArguments().getString("additionalTestOutputDir")?.let { File(it) }
+            ?: File(instrumentation.targetContext.getExternalFilesDir(null), "screenshots")
+        directory.mkdirs()
         File(directory, "$name.png").outputStream().use {
             checkNotNull(instrumentation.uiAutomation.takeScreenshot()).compress(Bitmap.CompressFormat.PNG, 100, it)
         }

@@ -71,7 +71,9 @@ class HomeScreenTest {
         compose.onNodeWithText("Что надеть").assertIsDisplayed()
         // Only an actual device/emulator run produces this file. Never supplied as a pre-rendered mock.
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val directory = File(context.getExternalFilesDir(null), "screenshots").apply { mkdirs() }
+        val directory = InstrumentationRegistry.getArguments().getString("additionalTestOutputDir")?.let { File(it) }
+            ?: File(context.getExternalFilesDir(null), "screenshots")
+        directory.mkdirs()
         File(directory, "dark-large-text.png").outputStream().use {
             compose.onNodeWithTag("home").captureToImage().asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 100, it)
         }
