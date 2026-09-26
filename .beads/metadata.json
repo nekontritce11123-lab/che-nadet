@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "chenadet",
+  "project_id": "18261014-102d-43dc-88e2-f1fc874f15fe"
+}
