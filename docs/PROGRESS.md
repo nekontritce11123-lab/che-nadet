@@ -19,3 +19,7 @@ Android candidate: implemented app-private DataStore, HTTPS/JSON boundary, singl
 Build bootstrap: checksum-pinned source scripts for Gradle 8.13 (not a standard Wrapper JAR). Attempting Gradle exits with DNS resolution failure; Android SDK/emulator are also absent. Integration kept on development/android-v1, not marked release-ready.
 
 Verification tooling: GitHub Actions clean build/unit/lint/APK + API 35 UI workflow added, not executed. Publication helper is create-only, refuses dirty checkout/existing repository, requires a device and successful native build/unit/lint/UI checks before GitHub writes. Five isolated fake-CLI regression tests RED → GREEN. No real GitHub writes in these tests.
+
+Fresh-clone verification of b5c68b7: core 51 groups / 4196 assertions PASS; publication guard 5/5 PASS; Kotlin PSI 30 files / 0 syntax errors; XML 6 files; shell and workflow syntax valid. No source changes from checks. Historical secret-pattern scan: 75 unique blobs, zero findings. Final native command clean/core:test/app:testDebugUnitTest/lintDebug/assembleDebug exits 6 before Gradle: DNS cannot resolve services.gradle.org. SDK/adb/emulator absent. GitHub remains unpublished.
+
+Final review: self-review (no subagent tool). Domain regressions corrected with RED→GREEN tests; Android integration still build-unverified. Ruling: retain both branches and package the actual candidate plus complete history; no merge to main and no fictional APK/screenshot/CI success. Final changes after b5c68b7 are documentation/license only.
