@@ -13,3 +13,7 @@ Regression pass: stale cached forecast was anchored to download time. Four new c
 Ruling: keep Android integration on development/android-v1; main remains the verified Kotlin core baseline until a native build can be run. This is not a claim of a completed Android release.
 
 Regression pass: expired current-hour precipitation probability could still be treated as upcoming rain. Added explicit probabilityUntil and evaluation-time filtering in recommendations and metric explanations. Two regression groups RED → GREEN. Latest core result: 51 groups / 4196 assertions, exit 0.
+
+Android candidate: implemented app-private DataStore, HTTPS/JSON boundary, single-shot coarse location and reverse geocoding, foreground lifecycle cancellation, request gates, manual city search, profiles, errors/cache states and Compose UI with explanations. Added 2 JSON unit tests, 6 ViewModel unit tests and 5 instrumented UI tests. These Android tests are WRITTEN, NOT RUN. Kotlin PSI parser: 30 .kt/.kts files, zero syntax errors; six XML files parse. PSI is NOT Android symbol/type checking.
+
+Build bootstrap: checksum-pinned source scripts for Gradle 8.13 (not a standard Wrapper JAR). Attempting Gradle exits with DNS resolution failure; Android SDK/emulator are also absent. Integration kept on development/android-v1, not marked release-ready.
