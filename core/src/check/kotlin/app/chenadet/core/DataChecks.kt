@@ -112,6 +112,26 @@ fun additionalChecks() = with(CoreChecks) {
         val cities = OpenMeteo.cities(mapOf("results" to rows))
         expect(cities.size == 1 && cities.first().name == "Москва", "valid city only")
     }
+    test("cached forecast is anchored to evaluation time not download time") {
+        val rainAlreadyPassed = point().copy(at = time.plusSeconds(3600), code = 63, rainMmH = 2.0)
+        val old = WeatherConditions(point(), listOf(rainAlreadyPassed), time, evaluationAt = time.plusSeconds(7200))
+        expect(old.forecastWindow(3).isEmpty(), "past event is not future")
+        expect(Reason.RAIN_LATER !in RecommendationEngine().recommend(old).reasons, "no stale future claim")
+        expect(old.fetchedAt == time, "freshness timestamp is not rewritten")
+    }
+    test("freezing air cannot recommend warm-weather clothes from contradictory apparent data") {
+        val r = result(point(-25.0).copy(apparentC = 12.0))
+        expect(r.layers.any { it.garment == Garment.WINTER_COAT }, "actual severe cold must constrain wardrobe")
+        expect(r.layers.any { it.garment == Garment.THERMAL_TOP }, "thermal base in severe cold")
+    }
+    test("extreme hot air cannot recommend winter clothes from contradictory apparent data") {
+        val r = result(point(40.0).copy(apparentC = -5.0))
+        expect(r.layers.none { it.garment == Garment.WINTER_COAT || it.garment == Garment.THERMAL_TOP }, "avoid dangerous insulation")
+    }
+    test("saturated humid heat still warns when provider apparent temperature is missing") {
+        val r = result(point(33.0).copy(apparentC = null, humidityPct = 100))
+        expect(r.warnings.any { it.hazard == Hazard.EXTREME_HEAT }, "bounded fallback must not hide humidity risk")
+    }
     test("forecast window sorts deduplicates and discards past data") {
         val after = point().copy(at = time.plusSeconds(3600)); val before = point().copy(at = time.minusSeconds(3600))
         val w = WeatherConditions(point(), listOf(after, before, after), time)

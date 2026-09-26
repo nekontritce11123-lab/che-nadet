@@ -25,6 +25,7 @@ data class WeatherConditions(
     val hourly: List<WeatherPoint> = emptyList(),
     val fetchedAt: Instant = current.at,
     val timezone: String = "UTC",
+    val evaluationAt: Instant = fetchedAt,
 )
 
 enum class Sensitivity(val clothingOffsetC: Double) { COLD(-2.0), NORMAL(0.0), HOT(2.0) }
@@ -62,7 +63,7 @@ enum class Reason {
     TEMPERATURE, FEELS_LIKE, WIND, WET, SNOW, UV, HUMID_HEAT,
     COLD_SENSITIVE, HOT_SENSITIVE, ACTIVITY, LONG_EXPOSURE,
     COOLING_LATER, RAIN_LATER, UV_LATER, STRONG_WIND, TRANSITION,
-    MISSING_DATA, APPARENT_ESTIMATED
+    MISSING_DATA, APPARENT_ESTIMATED, SAFETY_LIMIT
 }
 enum class Hazard { THUNDERSTORM, DANGEROUS_WIND, HEAVY_RAIN, FREEZING_PRECIPITATION, POSSIBLE_ICE, EXTREME_COLD, EXTREME_HEAT, VERY_HIGH_UV }
 enum class Severity { CAUTION, DANGER }

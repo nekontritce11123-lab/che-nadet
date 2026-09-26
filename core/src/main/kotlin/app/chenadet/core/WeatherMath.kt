@@ -52,7 +52,7 @@ fun apparentTemperature(point: WeatherPoint): Pair<Double, ApparentSource> {
 
 fun WeatherConditions.forecastWindow(hours: Int): List<WeatherPoint> {
     require(hours in 1..24)
-    val end = fetchedAt.plusSeconds(hours * 3600L)
-    return hourly.filter { it.at > fetchedAt && it.at <= end && it.temperatureC.isFinite() && it.temperatureC in -100.0..65.0 }
+    val end = evaluationAt.plusSeconds(hours * 3600L)
+    return hourly.filter { it.at > evaluationAt && it.at <= end && it.temperatureC.isFinite() && it.temperatureC in -100.0..65.0 }
         .sortedBy { it.at }.distinctBy { it.at }.map { it.normalized() }
 }

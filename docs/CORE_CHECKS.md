@@ -1,7 +1,7 @@
 # Executed core checks
 
-Groups passed: 45
-Assertions executed: 4186
+Groups passed: 49
+Assertions executed: 4194
 
 - PASS provider apparent temperature is not counted twice
 - PASS 10 C calm wind and rain have different protective layers
@@ -47,6 +47,10 @@ Assertions executed: 4186
 - PASS unexpected API unit never silently gives wrong advice
 - PASS short hourly arrays preserve nulls and do not crash
 - PASS empty city response is empty not a fake default town
+- PASS cached forecast is anchored to evaluation time not download time
+- PASS freezing air cannot recommend warm-weather clothes from contradictory apparent data
+- PASS extreme hot air cannot recommend winter clothes from contradictory apparent data
+- PASS saturated humid heat still warns when provider apparent temperature is missing
 - PASS forecast window sorts deduplicates and discards past data
 
 Exit: 0

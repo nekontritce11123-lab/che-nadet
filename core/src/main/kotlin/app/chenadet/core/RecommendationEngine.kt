@@ -17,7 +17,14 @@ class RecommendationEngine {
         if (profile.activity == Activity.ACTIVE || profile.activity == Activity.INDOORS) reasons += Reason.ACTIVITY
         if (profile.activity == Activity.OUTDOORS) reasons += Reason.LONG_EXPOSURE
 
-        val effective = apparent + profile.sensitivity.clothingOffsetC + profile.activity.clothingOffsetC
+        val adjusted = apparent + profile.sensitivity.clothingOffsetC + profile.activity.clothingOffsetC
+        // Defensive product guardrails: contradictory apparent data must not reverse a cold/heat outfit.
+        val effective = when {
+            p.temperatureC <= 0 -> minOf(adjusted, p.temperatureC + 5)
+            p.temperatureC >= 30 -> maxOf(adjusted, p.temperatureC - 5)
+            else -> adjusted
+        }
+        if (effective != adjusted) reasons += Reason.SAFETY_LIMIT
         // Continuous score; clothing is necessarily discrete, with removable optional layers near thresholds.
         val warmth = ((24.0 - effective) / 9.0).coerceIn(0.0, 7.0)
         val wet = p.isRain()
@@ -95,7 +102,7 @@ class RecommendationEngine {
             if (sample.code in WeatherCodes.freezing) warn(Hazard.FREEZING_PRECIPITATION, Severity.DANGER, later)
             if (sample.temperatureC <= 2 && (sample.isRain() || sample.isSnow())) warn(Hazard.POSSIBLE_ICE, Severity.CAUTION, later)
             if (sample.temperatureC <= -20 || feels <= -28) warn(Hazard.EXTREME_COLD, Severity.DANGER, later)
-            if (sample.temperatureC >= 35 || feels >= 38) warn(Hazard.EXTREME_HEAT, Severity.DANGER, later)
+            if (sample.temperatureC >= 35 || feels >= 38 || (sample.temperatureC >= 32 && (sample.humidityPct ?: 0) >= 70)) warn(Hazard.EXTREME_HEAT, Severity.DANGER, later)
             if (sample.isDay != false && (sample.uv ?: 0.0) >= 8) warn(Hazard.VERY_HIGH_UV, Severity.CAUTION, later)
         }
         val thermal = when {
