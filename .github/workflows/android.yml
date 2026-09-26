@@ -70,9 +70,9 @@ jobs:
           target: google_apis
           disable-animations: true
           script: |
-            gradle --no-daemon :app:connectedDebugAndroidTest
+            gradle --no-daemon :app:connectedDebugAndroidTest -Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true
             mkdir -p app/build/device-screenshots
-            adb pull /sdcard/Android/data/app.chenadet/files/screenshots/. app/build/device-screenshots/ || true
+            adb pull /sdcard/Android/data/app.chenadet/files/screenshots/. app/build/device-screenshots/
       - uses: actions/upload-artifact@v4
         if: always()
         with:
