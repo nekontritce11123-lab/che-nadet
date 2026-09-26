@@ -5,3 +5,5 @@ GitHub authenticated, no repository-create action. Remote device absent. No SDK/
 Ruling: continue in isolated local new repository; never label a local commit as pushed.
 
 Stage 2: contract tests first: 19/25 groups failed on initial no-rule implementation (core-red.log outside Git). Implemented rules and normalized optional inputs. `scripts/check-core.sh`: 25 groups, 4092 assertions, exit 0. Core compiles with Kotlin 1.9.0 / JDK 21 offline, target JVM 17. This does not verify Android.
+
+Stage 3: 17 new test groups failed before implementation. Implemented provider-normalization boundary without JSON/network dependencies, UTC alignment, interval conversion, unit checks, city parsing, freshness/cache/request policies and Russian explanations. `scripts/check-core.sh`: 45 groups / 4186 assertions, exit 0. All API fixtures are synthetic; no live HTTP verification claimed.

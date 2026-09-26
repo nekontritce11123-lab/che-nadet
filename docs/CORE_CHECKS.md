@@ -1,7 +1,7 @@
 # Executed core checks
 
-Groups passed: 25
-Assertions executed: 4092
+Groups passed: 45
+Assertions executed: 4186
 
 - PASS provider apparent temperature is not counted twice
 - PASS 10 C calm wind and rain have different protective layers
@@ -28,5 +28,25 @@ Assertions executed: 4092
 - PASS negative precipitation never creates a rain recommendation
 - PASS warmth demand changes continuously across temperature grid
 - PASS every profile and weather combination has sane unique layers
+- PASS cache freshness has explicit current stale expired and hidden states
+- PASS recent download of old model data is still stale
+- PASS future timestamp from wrong clock cannot be fresh
+- PASS cache never leaks weather from a previous city
+- PASS late network request cannot replace a newer request
+- PASS permission states distinguish first prompt refusal and settings recovery
+- PASS all garments accessories reasons and warnings have concise Russian text
+- PASS missing metrics are not rendered as a fabricated zero
+- PASS weather URL uses SI unix timestamps bounded hours and no API key
+- PASS URL coordinates and cache identity ignore device locale
+- PASS manual city input is encoded not interpreted as URL parameters
+- PASS decoder normalizes 15 minute accumulation into equivalent mm per hour
+- PASS decoder never double-applies timezone offset to Unix time
+- PASS missing interval does not assume an accumulation period
+- PASS zero missing and invalid observations remain distinct
+- PASS malformed mandatory current temperature is rejected
+- PASS unexpected API unit never silently gives wrong advice
+- PASS short hourly arrays preserve nulls and do not crash
+- PASS empty city response is empty not a fake default town
+- PASS forecast window sorts deduplicates and discards past data
 
 Exit: 0

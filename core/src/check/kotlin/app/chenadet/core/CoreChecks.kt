@@ -20,6 +20,7 @@ object CoreChecks {
         catch (e: Exception) { failures += "$name: ${e.message}"; println("FAIL $name: ${e.message}") }
     }
     fun run(): Int {
+        assertions = 0; passed.clear(); failures.clear()
         test("provider apparent temperature is not counted twice") {
             val r = result(point(10.0).copy(apparentC = 4.0, windMs = 9.0, gustMs = 12.0, humidityPct = 95))
             near(r.apparentC, 4.0, "provider apparent"); near(r.clothingTemperatureC, 4.0, "no extra wind/RH subtraction")
@@ -155,6 +156,7 @@ object CoreChecks {
                 }
             }
         }
+        additionalChecks()
         if (failures.isNotEmpty()) {
             println("\nFAILED ${failures.size} groups / ${passed.size + failures.size}; assertions=$assertions")
             return 1
